@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+import { Login } from "./Login";
+import { Premium } from "./Premium";
+import { CoreFrame } from "./CoreFrame";
+import { SuccessfulSubscription } from "./SuccessfulSubscription";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CoreFrame>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            index
+            element={
+              <Navigate to="/premium" replace />
+            }
+          />
+          <Route
+            index
+            path="/premium"
+            element={<Premium />}
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/success"
+            element={<SuccessfulSubscription />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </CoreFrame>
   );
 }
 
