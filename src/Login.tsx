@@ -23,7 +23,7 @@ export function Login() {
     const userId = await hashMessage(
       username + password
     );
-    setUserId(userId.slice(0, 24));
+    setUserId(userId);
     navigate("/premium");
   };
 

@@ -6,8 +6,7 @@ import {
   getUserId,
   removeUserId,
 } from "./storage";
-import { Subscription } from "./types";
-import { getSubscriptionsByUserId } from "./api";
+import { getIsUserActive } from "./api";
 import { useEffect, useState } from "react";
 
 const checkoutUrlParams = new URLSearchParams();
@@ -15,7 +14,7 @@ const checkoutUrlParams = new URLSearchParams();
 checkoutUrlParams.set("product", "Test product");
 checkoutUrlParams.set("token", "USDT");
 checkoutUrlParams.set("amount", "1");
-checkoutUrlParams.set("period", "day");
+checkoutUrlParams.set("period", "month");
 checkoutUrlParams.set("chains", "1,11155111");
 checkoutUrlParams.set("domain", "paybeaver.xyz");
 checkoutUrlParams.set(
@@ -23,20 +22,10 @@ checkoutUrlParams.set(
   "https://simple-merchant.paybeaver.xyz/success"
 );
 checkoutUrlParams.set("freeTrialLength", "0");
-checkoutUrlParams.set(
-  "paymentPeriod",
-  (60 * 60 * 24).toString() // one day
-);
+checkoutUrlParams.set("paymentPeriod", "day");
 
 function makeCheckoutUrl(userId: string) {
-  const subscriptionNonce = Math.floor(
-    Math.random() * 1e8
-  );
-
-  checkoutUrlParams.set(
-    "subscriptionId",
-    `${userId}${subscriptionNonce}`
-  );
+  checkoutUrlParams.set("userId", userId);
 
   return `https://gateway.paybeaver.xyz/subscribe?${checkoutUrlParams.toString()}`;
 }
@@ -45,10 +34,8 @@ function makeCheckoutUrl(userId: string) {
 export function Premium() {
   const navigate = useNavigate();
   const userId = getUserId();
-  const [
-    latestSubscription,
-    setLatestSubscription,
-  ] = useState<Subscription | null>();
+  const [isActive, setIsActive] =
+    useState<boolean>();
   const [clickerValue, setClickerValue] =
     useState(0);
 
@@ -56,19 +43,11 @@ export function Premium() {
     (async () => {
       if (!userId) return;
 
-      const subscriptions =
-        await getSubscriptionsByUserId(userId);
-
-      if (subscriptions.length === 0) {
-        setLatestSubscription(null);
-        return;
-      }
-
-      subscriptions.sort(
-        (a, b) =>
-          a.startTimestamp - b.startTimestamp
+      const isActive = await getIsUserActive(
+        userId
       );
-      setLatestSubscription(subscriptions[0]);
+
+      setIsActive(isActive);
     })();
   }, [userId]);
 
@@ -77,7 +56,7 @@ export function Premium() {
     return <Navigate to="/login" replace />;
   }
 
-  if (latestSubscription === undefined)
+  if (isActive === undefined)
     return <p>Loading...</p>;
 
   const onLogOut = () => {
@@ -90,56 +69,48 @@ export function Premium() {
     window.location.href = checkoutUrl;
   };
 
-  const userHasAccessComponent = (
-    <div>
-      <p style={{ margin: 0 }}>
-        Subscribed on{" "}
-        {new Date(
-          latestSubscription!.startTimestamp *
-            1000
-        ).toLocaleString()}
-      </p>
-      <p style={{ margin: 0 }}>
-        Next payment on{" "}
-        {new Date(
-          latestSubscription!.nextPaymentAt * 1000
-        ).toLocaleString()}
-      </p>
-      <p style={{ margin: 0, marginTop: 16 }}>
-        Woohoooo!!! Play this clicker! It's so
-        enjoyable ohmygod!!
-      </p>
-      <p style={{ margin: 0 }}>
-        Times clicked: {clickerValue}
-      </p>
-      <button
-        onClick={() =>
-          setClickerValue(clickerValue + 1)
-        }
-      >
-        Click!!!
-      </button>
-    </div>
-  );
-
-  const subscriptionPromptComponent = (
-    <div>
-      <p>
-        This component is available only to
-        premium subscribers. It costs $1 per day.
-      </p>
-      <button onClick={onSubscribe}>
-        Subscribe
-      </button>
-    </div>
-  );
+  if (isActive === false) {
+    return (
+      <div>
+        <div>
+          <p>
+            This component is available only to
+            premium subscribers. It costs $1 per
+            month.
+          </p>
+          <button onClick={onSubscribe}>
+            Subscribe
+          </button>
+        </div>
+        <button
+          onClick={onLogOut}
+          style={{ marginTop: 16 }}
+        >
+          Log out
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
-      {latestSubscription &&
-      latestSubscription.isActive
-        ? userHasAccessComponent
-        : subscriptionPromptComponent}
+      <div>
+        <p style={{ margin: 0, marginTop: 16 }}>
+          Woohoooo!!! You have a premium
+          subscription! Play this clicker! It's so
+          enjoyable ohmygod!!
+        </p>
+        <p style={{ margin: 0 }}>
+          Times clicked: {clickerValue}
+        </p>
+        <button
+          onClick={() =>
+            setClickerValue(clickerValue + 1)
+          }
+        >
+          Click!!!
+        </button>
+      </div>
       <button
         onClick={onLogOut}
         style={{ marginTop: 16 }}
