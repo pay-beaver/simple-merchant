@@ -22,7 +22,6 @@ checkoutUrlParams.set(
   "https://simple-merchant.paybeaver.xyz/success"
 );
 checkoutUrlParams.set("freeTrialLength", "0");
-checkoutUrlParams.set("paymentPeriod", "week");
 
 function makeCheckoutUrl(userId: string) {
   checkoutUrlParams.set("userId", userId);
