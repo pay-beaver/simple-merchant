@@ -15,7 +15,7 @@ checkoutUrlParams.set("product", "Test product");
 checkoutUrlParams.set("token", "USDT");
 checkoutUrlParams.set("amount", "1");
 checkoutUrlParams.set("period", "month");
-checkoutUrlParams.set("chains", "1,11155111");
+checkoutUrlParams.set("chains", "sepolia");
 checkoutUrlParams.set("domain", "paybeaver.xyz");
 checkoutUrlParams.set(
   "onSuccessUrl",

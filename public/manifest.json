@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Simple Beaver Merchant",
+  "name": "Simple Beaver Merchant - a simple project tht demonstrates usage of Beaver Subscriptions.",
   "icons": [
     {
       "src": "favicon.ico",
