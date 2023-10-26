@@ -14,7 +14,7 @@ const checkoutUrlParams = new URLSearchParams();
 checkoutUrlParams.set("product", "Test product");
 checkoutUrlParams.set("token", "USDT");
 checkoutUrlParams.set("amount", "1");
-checkoutUrlParams.set("period", "month");
+checkoutUrlParams.set("period", "30d");
 checkoutUrlParams.set("chains", "sepolia");
 checkoutUrlParams.set("domain", "paybeaver.xyz");
 checkoutUrlParams.set(
