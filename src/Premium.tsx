@@ -13,7 +13,7 @@ const checkoutUrlParams = new URLSearchParams();
 
 checkoutUrlParams.set("product", "Test product");
 checkoutUrlParams.set("token", "USDT");
-checkoutUrlParams.set("amount", "1");
+checkoutUrlParams.set("amount", "10");
 checkoutUrlParams.set("period", "30d");
 checkoutUrlParams.set(
   "chains",
@@ -77,7 +77,7 @@ export function Premium() {
         <div>
           <p>
             This component is available only to
-            premium subscribers. It costs $1 per
+            premium subscribers. It costs $10 per
             month.
           </p>
           <button onClick={onSubscribe}>
