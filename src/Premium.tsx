@@ -9,27 +9,11 @@ import {
 import { getIsUserActive } from "./api";
 import { useEffect, useState } from "react";
 
-const checkoutUrlParams = new URLSearchParams();
-
-checkoutUrlParams.set("product", "Test product");
-checkoutUrlParams.set("token", "USDT");
-checkoutUrlParams.set("amount", "10");
-checkoutUrlParams.set("period", "30d");
-checkoutUrlParams.set(
-  "chains",
-  "sepolia,polygon-mumbai"
-);
-checkoutUrlParams.set("domain", "paybeaver.xyz");
-checkoutUrlParams.set(
-  "onSuccessUrl",
-  "https://simple-merchant.paybeaver.xyz/success"
-);
-checkoutUrlParams.set("freeTrialLength", "0");
-
 function makeCheckoutUrl(userId: string) {
+  const checkoutUrlParams = new URLSearchParams();
   checkoutUrlParams.set("userId", userId);
 
-  return `https://gateway.paybeaver.xyz/subscribe?${checkoutUrlParams.toString()}`;
+  return `https://gateway.paybeaver.xyz/subscribe/2z6XGF?${checkoutUrlParams.toString()}`;
 }
 
 // Component with premium content that needs to be purchased.
