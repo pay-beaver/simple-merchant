@@ -13,7 +13,7 @@ function makeCheckoutUrl(userId: string) {
   const checkoutUrlParams = new URLSearchParams();
   checkoutUrlParams.set("userId", userId);
 
-  return `https://gateway.paybeaver.xyz/subscribe/6UrmEp?${checkoutUrlParams.toString()}`;
+  return `https://gateway.paybeaver.xyz/subscribe/VNfRi?${checkoutUrlParams.toString()}`;
 }
 
 // Component with premium content that needs to be purchased.
